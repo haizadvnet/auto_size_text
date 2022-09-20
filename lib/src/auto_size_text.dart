@@ -7,6 +7,8 @@ part of auto_size_text;
 /// overflows anyway, you should check if the parent widget actually constraints
 /// the size of this widget.
 class AutoSizeText extends StatefulWidget {
+
+  final void Function(double) ?currentFontSize;
   /// Creates a [AutoSizeText] widget.
   ///
   /// If the [style] argument is null, the text will use the style from the
@@ -31,6 +33,7 @@ class AutoSizeText extends StatefulWidget {
     this.overflowReplacement,
     this.textScaleFactor,
     this.maxLines,
+    this.currentFontSize,
     this.semanticsLabel,
   })  : textSpan = null,
         super(key: key);
@@ -56,6 +59,7 @@ class AutoSizeText extends StatefulWidget {
     this.overflowReplacement,
     this.textScaleFactor,
     this.maxLines,
+    this.currentFontSize,
     this.semanticsLabel,
   })  : data = null,
         super(key: key);
@@ -259,11 +263,13 @@ class _AutoSizeTextState extends State<AutoSizeText> {
       final textFits = result[1] as bool;
 
       Widget text;
-
       if (widget.group != null) {
         widget.group!._updateFontSize(this, fontSize);
+        widget.currentFontSize!(widget.group!._fontSize);
+        // widget.group.th = _fontSize;
         text = _buildText(widget.group!._fontSize, style, maxLines);
       } else {
+        widget.currentFontSize!(fontSize);
         text = _buildText(fontSize, style, maxLines);
       }
 
